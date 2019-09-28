@@ -1,0 +1,32 @@
+{
+  "name": "mongonews",
+  "version": "1.0.0",
+  "description": "News scraper",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lexi-winstanley/mongoNews.git"
+  },
+  "keywords": [
+    "news",
+    "scraper",
+    "mongo"
+  ],
+  "author": "Lexi Winstanley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lexi-winstanley/mongoNews/issues"
+  },
+  "homepage": "https://github.com/lexi-winstanley/mongoNews#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "mongoose": "^5.7.1",
+    "morgan": "^1.9.1"
+  }
+}
