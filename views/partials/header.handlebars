@@ -1,0 +1,14 @@
+<header>
+    <nav>
+        <ul class="navMenu">
+            {{#if nav.home}}
+            <li class="selected"><a href="/">Home</a></li>
+            <li><a href="/saved">Saved</a></li>
+            {{else}}
+            <li><a href="/">Home</a></li>
+            <li class="selected"><a href="/saved">Saved</a></li>
+            {{/if}}
+            <li id="scrapeHolder"><a href="/" id="scrapeArticles">Scrape New Articles</a></li>
+        </ul>
+    </nav>
+</header>

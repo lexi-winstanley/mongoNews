@@ -1,0 +1,32 @@
+{{>header}}
+<main>
+  <div id="wrapper">
+    <h1>Medium Javascript Scraper</h1>
+    <div id="articles">
+      {{#each dbArticles}}
+      <div class="article">
+        <h3>{{this.headline}}</h3>
+        <div class="articleImage">
+          <img src="{{this.imageSrc}}" alt="{{this.imageAlt}}">
+          <h6>{{this.imageCaption}}</h6>
+        </div>
+        <div class="articleDetails">
+          <a class="articleLink" href="{{this.link}}">
+            <h5 class="articleInfo">{{this.date}}</h5>
+            <p class="articleSummary">{{this.summary}}</p>
+            <h5>
+              <a class="articleUrl" href="{{this.link}}">{{this.link}}</a>
+            </h5> 
+          </a>
+        </div>
+        <div class="buttonHolder">
+          <button class="saveArticle" data-id="{{this._id}}">Save Article</button>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</main>
+{{>footer}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/javascript/app.js"></script>

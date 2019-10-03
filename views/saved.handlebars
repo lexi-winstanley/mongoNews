@@ -1,0 +1,64 @@
+{{>header}}
+<main>
+  <div id="wrapper">
+    <h1>Medium Javascript Scraper</h1>
+    <div id="articles">
+      {{#each dbArticles}}
+      <div class="article">
+        <h3>{{this.headline}}</h3>
+        <div class="articleImage">
+          <img src="{{this.imageSrc}}" alt="{{this.imageAlt}}">
+          <h6>{{this.imageCaption}}</h6>
+        </div>
+        <div class="articleDetails">
+          <a class="articleLink" href="{{this.link}}">
+            <h5 class="articleInfo">{{this.date}}</h5>
+            <p class="articleSummary">{{this.summary}}</p>
+            <h5>
+              <a class="articleUrl" href="{{this.link}}">{{this.link}}</a>
+            </h5> 
+          </a>
+        </div>
+        <div class="buttonHolder">
+          <button class="removeArticle" data-id="{{this._id}}">Remove From Saved</button>
+        </div>
+        <div class="notesHolder">
+          <button class="notes" data-id="{{this._id}}">
+            Notes
+            <span class="arrowContainer">
+              <img class="expandArrow" src="/images/expandArrow.svg" alt="expand item requests">
+              <img class="collapseArrow" src="/images/collapseArrow.svg" alt="collapse item requests">
+            </span>
+          </button>
+          {{#if this.notes}}
+          <div class="existingNotes">
+            existing
+          </div>
+          <div class="newNote">
+            <h4>New Note</h4>
+            <form>
+              <textarea class="newNote" id="{{this._id}}"></textarea>
+              <button class="addNewNote" data-id="{{this._id}}">Save Note</button>
+            </form>
+          </div>
+          {{else}}
+          <div class="emptyNotes">
+            <p>There are no existing notes for this article.</p>
+          </div>
+          <div class="newNote">
+            <h4>New Note</h4>
+            <form>
+              <textarea class="newNote" id="{{this._id}}"></textarea>
+              <button class="addNewNote" data-id="{{this._id}}">Save Note</button>
+            </form>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</main>
+{{>footer}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="/javascript/app.js"></script>

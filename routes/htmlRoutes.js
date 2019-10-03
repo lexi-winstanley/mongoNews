@@ -4,12 +4,33 @@ const cheerio = require('cheerio');
 
 module.exports = function (app) { 
     app.get('/', function(req, res) {
-        res.locals.metaTags = {
-            title: 'Medium JavaScript',
-            description: 'Assignment required by UW Coding Bootcamp',
-            keywords: 'mongo, medium, javascript'
+        const nav = {
+            home: true
         };
-        res.render('index', {
+        db.Article.find({saved: false})
+        .then(function (dbArticles) {
+            res.locals.metaTags = {
+                title: 'Medium JavaScript',
+                description: 'Assignment required by UW Coding Bootcamp',
+                keywords: 'mongo, medium, javascript'
+            };
+            console.log(dbArticles);
+            res.render('index', {dbArticles, nav});
+        })
+        .catch(function (err) {
+            console.log(err);
+            res.render('error', {err});
+        });
+    });
+
+    app.get('/saved', function (req, res) {
+        db.Article.find({saved : true})
+        .then(function (dbArticles) {
+            res.render('saved', {dbArticles});
+        })
+        .catch(function (err) {
+            console.log(err);
+            res.render('error', {err});
         });
     });
 }

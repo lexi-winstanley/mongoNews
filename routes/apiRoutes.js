@@ -4,24 +4,140 @@ const cheerio = require('cheerio');
 
 module.exports = function (app) {
     app.get('/api/scrape', function (req, res) {
-        axios.get('https://medium.com/topic/javascript').then(function (response) {
+        axios.get('https://www.npr.org/sections/technology/').then(function (response) {
             const $ = cheerio.load(response.data);
-            $('section.hp.hq.ap').each(function (i, element) {
+            $('#overflow article.item.has-image').each(function (i, element) {
                 let result = {};
-                result.headline = $(this).find('h3.aw.bh.ez.cd.fa.ce.gq.hz.ia.az.bc.gs.ff.fg.bb a').text();
-                result.link = 'https://medium.com' + $(this).find('h3.aw.bh.ez.cd.fa.ce.gq.hz.ia.az.bc.gs.ff.fg.bb a').attr('href');
-                result.summary = $(this).find('p.ci.cj.cd.b.ce.cf.cg.ch.az.bc.fi.ff.fg.bb.gj.gt a').text();
-                result.author = $(this).find('span.cd.b.ce.cf.cg.ch.az.bc.fi.ff.fg.bb.aw.bh a').text();
-                let otherInfo = $(this).find('span.cd.b.ce.cf.cg.ch.l.ci.cj div.he.ap.dl').text();
-                let otherInfoSplit = otherInfo.split('\267');
-                result.date = otherInfoSplit[0];
-                result.readTime = otherInfoSplit[1];
+                result.headline = $(this).find('h2.title a').text();
+                result.link = $(this).find('h2.title a').attr('href');
+                result.imageSrc = $(this).find('div.item-image img').attr('src');
+                result.imageAlt = $(this).find('div.item-image img').attr('alt');
+                result.imageCaption = $(this).find('div.item-image span.credit').text().replace(/[\t\n]+/g, ' ').trim();
+                const rawDate = $(this).find('p.teaser span.date').text();
+                const trimmedDate = rawDate.substring(0, rawDate.length - 3);
+                const rawSummary = $(this).find('p.teaser a').text().substring(trimmedDate.length + 3);
+                result.summary = rawSummary;
+                result.date = trimmedDate;
+                result.saved = false;
                 console.log(result);
+                db.Article.findOne({ headline: result.headline })
+                    .then(function (dbArticle) {
+                        if (dbArticle === null) {
+                            db.Article.create(result)
+                                .then(function (newDbArticle) {
+                                    console.log(newDbArticle);
+                                })
+                                .catch(function (err) {
+                                    console.log(err);
+                                });
+                        } else {
+                            console.log('Already added');
+                        }
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
             });
-            res.json(response.data)
+            res.location('/');
         });
     });
-}
+
+    app.put('/api/:status', function (req, res) {
+        const articleId = req.body.id;
+        let saveStatus;
+        console.log(req.body);
+        console.log(req.params.id);
+        if (req.params.status === 'save') {
+            saveStatus = true;
+            db.Article.findOneAndUpdate({_id: articleId}, {saved: saveStatus})
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+        } else if (req.params.status === 'remove') {
+            saveStatus = false;
+            db.Article.findOneAndUpdate({_id: articleId}, {saved: saveStatus})
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+        }
+    });
+
+    app.post('/api/notes', function (req, res) {
+        console.log(req.body);
+        db.Note.create(req.body)
+        .then(function(dbNote) {
+          return db.Article.findOneAndUpdate({_id: req.params.id}, { $set: { note: dbNote._id } }, { new: true });
+        })
+        .then(function(dbArticle) {
+          res.json(dbArticle);
+        })
+        .catch(function(err) {
+          res.json(err);
+        });
+    });
+
+    app.put('/api/notes', function (req, res) {
+        const articleId = req.body.id;
+        let saveStatus;
+        console.log(req.body);
+        console.log(req.params.id);
+        if (req.params.status === 'save') {
+            saveStatus = true;
+            db.Article.findOneAndUpdate({_id: articleId}, {saved: saveStatus})
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+        } else if (req.params.status === 'remove') {
+            saveStatus = false;
+            db.Article.findOneAndUpdate({_id: articleId}, {saved: saveStatus})
+            .then(function (dbArticle) {
+                res.json(dbArticle);
+                console.log(dbArticle);
+            })
+            .catch(function (err) {
+                res.json(err);
+            });
+        }
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // app.get('/articles', function (req, res) {
+    //     db.Article.find({})
+    //     .then(function (dbArticles) {
+    //         res.json(dbArticles);
+    //     })
+    //     .catch(function (err) {
+    //         res.json(err);
+    //     });
+    // });
+
+
+
 
 
 //     app.get('/scrape', function (req, res) {
