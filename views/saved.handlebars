@@ -1,7 +1,7 @@
 {{>header}}
 <main>
   <div id="wrapper">
-    <h1>Medium Javascript Scraper</h1>
+    <h1>Saved Articles</h1>
     <div id="articles">
       {{#each dbArticles}}
       <div class="article">
@@ -23,32 +23,33 @@
           <button class="removeArticle" data-id="{{this._id}}">Remove From Saved</button>
         </div>
         <div class="notesHolder">
-          <button class="notes" data-id="{{this._id}}">
-            Notes
-            <span class="arrowContainer">
-              <img class="expandArrow" src="/images/expandArrow.svg" alt="expand item requests">
-              <img class="collapseArrow" src="/images/collapseArrow.svg" alt="collapse item requests">
-            </span>
-          </button>
+          <h4>Article Notes</h4>
+        
           {{#if this.notes}}
           <div class="existingNotes">
-            existing
+            <h5>Existing Notes</h5>
+            {{#each this.notes}}
+            <div class="noteHolder">
+              <p data-note="{{this._id}}">{{this.body}}</p>
+              <button class="deleteNote" data-note="{{this._id}}">Delete</button>
+            </div>
+            {{/each}}
           </div>
           <div class="newNote">
-            <h4>New Note</h4>
-            <form>
-              <textarea class="newNote" id="{{this._id}}"></textarea>
+            <h5>New Note</h5>
+            <form class="noteForm">
+              <textarea class="newNoteInput" id="{{this._id}}"></textarea>
               <button class="addNewNote" data-id="{{this._id}}">Save Note</button>
             </form>
           </div>
           {{else}}
           <div class="emptyNotes">
-            <p>There are no existing notes for this article.</p>
+            <h5>There are no existing notes for this article.</h5>
           </div>
           <div class="newNote">
-            <h4>New Note</h4>
-            <form>
-              <textarea class="newNote" id="{{this._id}}"></textarea>
+            <h5>New Note</h5>
+            <form class="noteForm">
+              <textarea class="newNoteInput" id="{{this._id}}"></textarea>
               <button class="addNewNote" data-id="{{this._id}}">Save Note</button>
             </form>
           </div>
