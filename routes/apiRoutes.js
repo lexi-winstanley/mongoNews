@@ -6,6 +6,7 @@ module.exports = function (app) {
     app.get('/api/scrape', function (req, res) {
         axios.get('https://www.npr.org/sections/technology/').then(function (response) {
             const $ = cheerio.load(response.data);
+            var promises = [];
             $('#overflow article.item.has-image').each(function (i, element) {
                 let result = {};
                 result.headline = $(this).find('h2.title a').text();
@@ -19,11 +20,11 @@ module.exports = function (app) {
                 result.summary = rawSummary;
                 result.date = trimmedDate;
                 result.saved = false;
-                console.log(result);
-                db.Article.findOne({ headline: result.headline })
-                    .then(function (dbArticle) {
+                promises.push(async function() {
+                    await db.Article.findOne({ headline: result.headline }).exec()
+                    .then(async function (dbArticle) {
                         if (dbArticle === null) {
-                            db.Article.create(result)
+                            await db.Article.create(result)
                                 .then(function (newDbArticle) {
                                     console.log(newDbArticle);
                                 })
@@ -37,8 +38,12 @@ module.exports = function (app) {
                     .catch(function (err) {
                         console.log(err);
                     });
+                }())
+                
             });
-            res.location('/');
+            Promise.all(promises).then(function() {
+                res.sendStatus(204);
+            })
         });
     });
 
