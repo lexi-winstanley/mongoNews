@@ -24,5 +24,5 @@ HTML
 <br/>Node.js
 <br/>Express
 <br/>Heroku
-**Node Packages:** 
+<br/>**Node Packages:** 
 <br/>express, express-handlebars, mongoos, cheerio, axios
