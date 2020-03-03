@@ -1,5 +1,5 @@
 # Mongo NPR Scraper
-[https://mongo---news.herokuapp.com](https://mongo---news.herokuapp.com)
+[View Live](https://mongo---news.herokuapp.com)
 
 ## Motivation 
 To create a web application that will allow users to scrape content from another website and store it in a MongoDB database, denote "Favorites" and add notes associated with particular content. The user interface should display the stored content clearly and attractively and make available user actions clear.
